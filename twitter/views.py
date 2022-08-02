@@ -72,7 +72,7 @@ def detail(request,id):
         'post':grab,
         'comments':filt
     }
-    return render(request,'twitter/detail.html',context)
+    return render(request,'twitter/category_detail.html',context)
 def Comment(request,id):
     if request.method == 'POST':
         user = request.user
@@ -99,7 +99,6 @@ def remove(request,id):
 def search(request):
     if request.method == 'GET':
         grab = request.GET.get('search')
-        user = User.objects.all()
         if grab:
             store = Q(Q(content__icontains=grab))
             save = posts.objects.filter(store)

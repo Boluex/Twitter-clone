@@ -4,11 +4,21 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth import authenticate,login,logout
 from .forms import renew,person
-from django.core.mail import send_mail
-import os
-from django.conf import settings
-
+from .models import profile
+import csv
+from django.http import HttpResponse
 # Create your views here.
+
+def export_to_csv(request):
+    profiles = profile.objects.all().order_by('-id')
+    response=HttpResponse('text/csv')
+    response['Content-disposition']='attachment; filename-profile_export.csv'
+    writer = csv.writer(response)
+    writer.writerow(['user','image'])
+    profile_fields=profiles.values_list('user','image')
+    for Profile in profile_fields:
+        writer.writerow(Profile)
+    return response
 def register(request):
     if request.method =='POST':
         email = request.POST['email']

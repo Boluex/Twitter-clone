@@ -5,6 +5,7 @@ from django.utils import timezone
 class posts(models.Model):
     author = models .ForeignKey(User,on_delete=models.CASCADE,related_name='yo')
     content= models.TextField()
+    image=models.ImageField(upload_to='images')
     tagline=models.CharField(max_length=20000)
     liked=models.ManyToManyField(User,default=None,blank=True,related_name='blah')
     date_posted=models.DateTimeField(default=timezone.now)
