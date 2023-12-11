@@ -62,7 +62,7 @@
                            class="rounded-circle mr-2"
                            style="width: 20px; height: 20px;"
                            src="{{ comment.author.profile.image.url }}">
-                       <a class="mr-2 white-important" href="{% url 'userposts' comment.author.username %}">
+                       <a class="mr-2 white-important" href="{% url 'userposts' comment.user.username %}">
                            {{ comment.author }}
                        </a>
                    </div>

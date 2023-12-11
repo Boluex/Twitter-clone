@@ -8,10 +8,11 @@
         </div>
       </div>
 
-      {% for post in store %}
+      {% for post in post %}
 
         <article class="media content-section">
-            <p class="article-content">{{ post.content }}</p>
+            <p class="article-content">{{ post.username }}</p>
+            <p class="article-content">{{ post.email }}</p>
             </hr>
           </div>
         </article>

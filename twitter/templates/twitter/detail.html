@@ -62,8 +62,8 @@
                            class="rounded-circle mr-2"
                            style="width: 20px; height: 20px;"
                            src="{{ comment.author.profile.image.url }}">
-                       <a class="mr-2 white-important" href="{% url 'userposts' comment.author.username %}">
-                           {{ comment.author }}
+                       <a class="mr-2 white-important" href="">
+                           {{ comment.user }}
                        </a>
                    </div>
                </div>
@@ -91,11 +91,12 @@
                 <h3 class="white-important mb-3">
                     Add a comment
                 </h3>
-                <form method="POST" action="{% url 'comment' post.id %}">
+                <form method="POST" enctype='multipart/form-data' action="{% url 'new_comment' post.id %}">
                     {% csrf_token %}
                     <fieldset class="form-group">
-                       <input type="text" name="text" placeholder="Add a comment">
-                       <input type='hidden' name='sauce' value="{{ post.is }}">
+                       <input type="text" name="content" placeholder="Add a comment">
+                       <input type="file" name="image" placeholder="Add a comment">
+                       <input type='hidden' name='sauce' value="{{ post.id }}">
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-primary" type="submit">Submit comment</button>

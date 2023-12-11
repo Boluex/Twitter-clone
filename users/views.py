@@ -1,9 +1,12 @@
+from django.shortcuts import render
+from.forms import renew,person
+# Create your views here.
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth import authenticate,login,logout
-from .forms import renew,person
+# from .forms import renew,person
 from .models import profile
 import csv
 from django.http import HttpResponse

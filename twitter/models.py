@@ -1,38 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models import Q
 # Create your models here.
 class posts(models.Model):
-    author = models .ForeignKey(User,on_delete=models.CASCADE,related_name='yo')
-    content= models.TextField()
-    image=models.ImageField(upload_to='images')
-    tagline=models.CharField(max_length=20000)
-    liked=models.ManyToManyField(User,default=None,blank=True,related_name='blah')
+    author=models.ForeignKey(User,on_delete=models.CASCADE)
+    title=models.CharField(max_length=200)
+    image=models.ImageField(upload_to='post_images')
+    content=models.TextField()
     date_posted=models.DateTimeField(default=timezone.now)
 
-
-like_choices = (
-    ('like','like'),
-    ('unlike','unlike')
-)
-
-choice = (
-    ('follow','follow',),
-    ('unfollow','unfollow')
-)
-
-
-
-
-class likebutton(models.Model):
-    value = models.CharField(choices=like_choices,max_length=12,default=None)
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    post = models.ForeignKey(posts,on_delete=models.CASCADE)
-
 class comment(models.Model):
-    post = models.ForeignKey(posts,on_delete=models.CASCADE)
-    author = models.ForeignKey(User,on_delete=models.CASCADE)
-    content =models.CharField(max_length=120000)
-    date_posted=models.TimeField(auto_now_add=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    post=models.ForeignKey(posts,on_delete=models.CASCADE)
+    image=models.ImageField(upload_to='comment_images')
+    content=models.CharField(max_length=300)
+    date_posted=models.DateTimeField(auto_now_add=True)
+
+
+class follow_button(models.Model):
+    follower=models.ForeignKey(User,on_delete=models.CASCADE,related_name='follower')
+    following=models.ForeignKey(User,on_delete=models.CASCADE,related_name='following')
+
+
+class like_button(models.Model):
+    post=models.ForeignKey(posts,on_delete=models.CASCADE,related_name='post')
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='user')
 
 

@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django import forms
-from.models import profile
 from django.forms import ModelForm
+from.models import profile
+
 class renew(ModelForm):
     email= forms.EmailField()
     name = forms.CharField(max_length=2000)

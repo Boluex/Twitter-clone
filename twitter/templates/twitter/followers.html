@@ -1,0 +1,211 @@
+{% extends "twitter/base.html" %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-md-3 pr-4 dont-move">
+            <a href="/"><h2><img class="img-fluid" width="60" src="{% static 'twitter/logo.png' %}">BlogRoom</h2></a>
+            <div class="profile-section">
+            <h3 class="white-important p-2">
+                Profile
+            </h3>
+            <article class="media content-section" style="height: 140px; width: 100%">
+                    <div class="mt-2 d-flex full-width align-items-center">
+                        <img
+                           class="rounded-circle mr-3 img-fluid"
+                           style="width: 90px; height: 90px;"
+                           src="{{ user.profile.image.url }}">
+                        <div>
+                            <h4 style="text-align: left"
+                                    class="white-important">
+                                {{ user.profile.username }}
+                            </h4>
+                            <h6 style="text-align: left"
+                                    class="email-profile">
+                                {{ user.email }}
+                            </h6>
+
+                        </div>
+                    </div>
+            </article>
+            <article class="media content-section">
+                <div class="row full-width pl-2">
+                    <div class="col-6">
+                            Followers
+                    </div>
+                    <div class="col-6">
+                            Following
+                    </div>
+                        <div class="col-6">
+                            <h3 class="white-important follow-click">
+                                <a href="#">
+                                   {{ followers}}
+                                </a>
+                            </h3>
+                        </div>
+                         <div class="col-6">
+                            <a href="#">
+                                <h3 class="white-important follow-click">
+                                    {{ following}}
+                                </h3>
+                            </a>
+                        </div>
+                </div>
+
+            <div class="d-flex">
+                {% if user is None %}
+                <div style="margin-left: auto; margin-right:auto">
+                    <a class="btn btn-sm btn-outline-primary mb-4 mr-3 " href="{% url 'create' %}">
+                        Tweet
+                    </a>
+                </div>
+                {% endif %}
+
+            </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 scrollable" >
+            <div class="full-width row">
+
+                 <div class="col-6 no-padding">
+                    <h6
+                            style="position: absolute; bottom: 0; right: 0"
+                            class="white-important mb-3">
+                        {{ page_obj.start_index }} - {{ page_obj.end_index }} of
+                        {{ paginator.count }}
+                    </h6>
+                </div>
+            </div>
+
+            {% for post in posts %}
+                <div class="col-6">
+                    <h3 class="white-important mb-3">
+                        People following you
+                    </h3>
+                </div>
+                <article class="media content-section hovered-tweet">
+                <div style="width: 100%; word-break: break-all;">
+
+                    <div class="pb-2 row m-0" style="width: 100%; margin-right: 0 !important;">
+                       <div
+                               style="padding-left: 0px !important;"
+                               class="col-8 no-padding d-flex align-items-center">
+                           <img
+                               class="rounded-circle mr-2"
+                               style="width: 20px; height: 20px;"
+                               src="{{ post.follower.user.profile.image.url }}">
+                           <a class="mr-2 white-important" href="{% url 'userposts' post.follower.username %}">
+                               {{ post.follower.username }}
+                           </a>
+                       </div>
+
+                   </div>
+
+
+                        <div class="row">
+                            <div class="col-6" style="display: flex;">
+                                <small style="opacity: 0.4;">
+
+                                    <!-- follow Buttons Here -->
+                                    <form id="" method="POST" action="" >
+                                    {% csrf_token %}
+                                       <button type="button" class="btn btn-info">follow back</button>
+                                    </form>
+                                </small>
+                            </div>
+
+                        </div>
+
+                </div>
+                </article>
+            {% empty %}
+            <article class="t-section media content-section">
+
+                    <div class="row ">
+                        <div class="col-12">
+                            <h3>Who to follow</h3>
+                        </div>
+                        <ul class="col-12 mt-2">
+                            {% for user in all_users %}
+                                <li>
+                                    <div class="who-to-follow">
+
+                                        <div
+                                               style="padding-left: 0px !important;"
+                                               class="col-8 no-padding d-flex align-items-center">
+                                           <img
+                                               class="rounded-circle mr-2"
+                                               style="width: 20px; height: 20px;"
+                                               src="{{ user.profile.image.url }}">
+                                           <a class="mr-2 white-important" href="{% url 'userposts' user.username %}">
+                                               {{ user.username }}
+                                           </a>
+                                       </div>
+                                        <p>{{ user.email }}</p>
+                                        <a href="{% url 'view_profile' user.username %}" class="btn btn-outline-primary">view_profile</a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            <a href="#">
+                               <h4 class="white-important follow-click">
+                                    more
+                               </h4>
+                            </a>
+                        </ul>
+
+                    </div>
+
+                </article>
+            {% endfor %}
+
+            <div class="full-width d-flex justify-content-center">
+                {% if is_paginated %}
+                    {% if page_obj.has_previous %}
+                        <a class="btn btn-sm btn-outline-secondary mb-4 mr-2"
+                                href="?page=1">First</a>
+                        <a class="btn btn-sm btn-outline-secondary mb-4 mr-2"
+                                href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <a class="btn btn-sm btn-info mb-4 mr-2"
+                                href="?page={{ num }}">{{ num }}</a>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a class="btn btn-sm btn-outline-secondary mb-4 mr-2"
+                                href="?page={{ num }}">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a class="btn btn-sm btn-outline-secondary mb-4 mr-2"
+                                href="?page={{ page_obj.next_page_number }}">Next</a>
+                           <a class="btn btn-sm btn-outline-secondary mb-4 mr-2"
+                            href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-12 col-md-3 dont-move">
+            <form action="{% url 'search' %}" method="GET">{% csrf_token %}
+                <div class="search-container">
+                    <div class="search">
+                    <input required name="search" type="text" id="zip-code-input" placeholder="Search Twitter">
+                    <button type="submit" style="border:0; background: transparent;"><i class="fa fa-search"></i> </button> </a>
+                </form>
+              </div>
+            </div>
+            <h3 class="white-important mb-3 mt-4"> Trends </h3>
+
+
+
+
+                <p><a href="">Terms</a>,
+<a href="">Privacy policy</a>,
+<a href="">Cookies</a>,
+<a href="">Ads info</a>,
+<a href="">More</a>
+© 2020 Twitter, Inc.</p>
+
+        </div>
+    </div>
+{% endblock content %}

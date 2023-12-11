@@ -1,0 +1,25 @@
+{% extends "twitter/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="content-section">
+            <div class="media">
+                <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+                <div class="media-body">
+                  <h2 class="account-heading">{{ profile.user.username }}</h2>
+                  <p class="text-secondary">{{ profile.user.email }}</p>
+                  <h3 class="text-secondary">followers:{{ followers }}</h3>
+                  <h3 class="text-secondary">following:{{ following }}</h3>
+                </div>
+                <form method='POST' action="{% url 'create_follower' profile.user.username%}">
+                 {% csrf_token %}
+                    {% if follow_value == None %}
+                      <button type="submit" class="btn btn-outline-primary">follow</button>
+                    {% else %}
+                      <button type="submit" class="btn btn-outline-primary">unfollow</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

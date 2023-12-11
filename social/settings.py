@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)v-zb6^f1-e#dik$*03$asa@1n(-o-57qd+k6$ip2w8%0*wj4*'
+SECRET_KEY = 'django-insecure-5epy7azi!(e)alhrc2vws9#hdzyke69q#kn28a4#v7hy)8ci!z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -34,13 +33,14 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'twitter',
     'users',
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crispy_forms',
+
 ]
 
 MIDDLEWARE = [
@@ -117,22 +117,16 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+# ASGI_APPLICATION='social.routing.application'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = 'images'
-MEDIA_URL = '/images/'
-STATICFILES_DIR=[BASE_DIR/'images']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER=os.environ.get('MY_EMAIL')
-EMAIL_HOST_PASSWORD=os.environ.get('MY_PASS')
-EMAIL_USE_TLS=True
+MEDIA_URL='/files/'
+MEDIA_ROOT='files'
+STATICFILES_DIR=[BASE_DIR/'files']
