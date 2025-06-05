@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('SCM') {
+            steps {
+                git changelog: false, poll: false, url: 'https://github.com/Boluex/Twitter-clone.git'
+            }
+        }
+  
+        stage('Docker build and push') {
+            steps {
+                script{
+                    withDockerRegistry(credentialsId: 'dockerhub') {
+                        sh "docker build -t  boluex/twitter_clone:${BUILD_NUMBER} ."
+                        sh "docker push boluex/twitter_clone:${BUILD_NUMBER}"
+                      }
+                }
+            }
+        }
+    }
+}
