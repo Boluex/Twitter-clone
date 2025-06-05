@@ -29,6 +29,8 @@ def post_delete(request,id):
          messages.error(request,'action denied')
          return redirect(reverse(detail,args=[id]))
 def home(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     all_post=posts.objects.all().order_by('-id')
     user_all=[]
 
