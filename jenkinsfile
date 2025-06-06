@@ -5,11 +5,11 @@ pipeline {
 
     }
     stages {
-        stage('Checkout') {
-            steps {
-               echo git CICD
-            }
-        }
+        // stage('Checkout') {
+        //     steps {
+        //        echo git CICD
+        //     }
+        // }
         stage('Check Commit Message') {
             steps {
                 script {
