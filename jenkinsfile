@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        IMAGboluex/twitter_cloneE_NAME = "boluex/twitter_clone"
+        IMAGE_NAME = "boluex/twitter_clone"
+
     }
     stages {
         stage('Checkout') {
@@ -47,7 +48,7 @@ pipeline {
                 // Replace the image tag in your k8s manifest and apply
                 sh 'sed "s|IMAGE_TAG|${IMAGE_TAG}|g" deployment.yaml.template > deployment.yaml'
                 sh 'kubectl apply -f deployment.yaml'
-                
+
             }
         }
     }
