@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: twitter-clone
+  namespace: twitter
+  labels:
+    app:  twitter-clone
+spec:
+  selector:
+    matchLabels:
+      app: twitter-clone
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  twitter-clone
+    spec:
+      containers:
+      - name:  twitter-clone
+        image:  boluex/twitter_clone:IMAGE_TAG
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  twitter-clone
+  namespace: twitter
+spec:
+  selector:
+    app:  twitter-clone
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+    name: http
+  type: ClusterIP
+
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name:  twitter-clone
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app:  twitter-clone
+  namespaceSelector:
+    matchNames:
+    - twitter
+  endpoints:
+  - interval: 15s
+    port: http
+    path: /metrics
+    scrapeTimeout: 14s

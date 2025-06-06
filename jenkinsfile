@@ -1,21 +1,53 @@
 pipeline {
     agent any
-
+    environment {
+        IMAGboluex/twitter_cloneE_NAME = "boluex/twitter_clone"
+    }
     stages {
-        stage('SCM') {
+        stage('Checkout') {
             steps {
-                git changelog: false, poll: false, url: 'https://github.com/Boluex/Twitter-clone.git'
+                checkout scm
             }
         }
-  
-        stage('Docker build and push') {
+        stage('Check Commit Message') {
             steps {
-                script{
-                    withDockerRegistry(credentialsId: 'dockerhub') {
-                        sh "docker build -t  boluex/twitter_clone:${BUILD_NUMBER} ."
-                        sh "docker push boluex/twitter_clone:${BUILD_NUMBER}"
-                      }
+                script {
+                    // Get the latest commit message
+                    COMMIT_MSG = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    // Only proceed if the commit message contains [build-image]
+                    if (!COMMIT_MSG.contains('[build-image]')) {
+                        currentBuild.result = 'SUCCESS'
+                        echo "Skipping Docker build: commit message does not contain [build-image]"
+                        // Use 'return' to skip next stages
+                        return
+                    }
+                    // Set environment variable for tag (use short SHA)
+                    env.IMAGE_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
                 }
+            }
+        }
+        stage('Build and Push Docker Image') {
+            when {
+                expression { env.IMAGE_TAG != null }
+            }
+            steps {
+                script {
+                    withDockerRegistry([credentialsId: 'dockerhub']) {
+                        sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                        sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                    }
+                }
+            }
+        }
+        stage('Deploy to K8s') {
+            when {
+                expression { env.IMAGE_TAG != null }
+            }
+            steps {
+                // Replace the image tag in your k8s manifest and apply
+                sh 'sed "s|IMAGE_TAG|${IMAGE_TAG}|g" deployment.yaml.template > deployment.yaml'
+                sh 'kubectl apply -f deployment.yaml'
+                
             }
         }
     }
