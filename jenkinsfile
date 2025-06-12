@@ -4,11 +4,11 @@ pipeline {
         IMAGE_NAME = "boluex/twitter_clone"
     }
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+        // stage('Checkout') {
+        //     steps {
+        //         checkout scm
+        //     }
+        // }
         stage('Check Commit Message') {
             steps {
                 script {
