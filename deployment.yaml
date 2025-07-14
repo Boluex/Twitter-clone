@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name:  twitter-clone
-        image:  boluex/twitter_clone:IMAGE_TAG
+        image:  boluex/twitter_clone:8261693
         ports:
         - containerPort: 8000
         resources:
@@ -37,12 +37,14 @@ metadata:
 spec:
   selector:
     app:  twitter-clone
+  type: NodePort
   ports:
   - protocol: TCP
     port: 80
     targetPort: 8000
     name: http
-  type: ClusterIP
+    nodePort: 30080
+  
 
 
 ---
@@ -65,5 +67,3 @@ spec:
     scrapeTimeout: 14s
 
 
-
-    #
