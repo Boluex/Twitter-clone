@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name:  twitter-clone
-        image:  boluex/twitter_clone:8261693
+        image:  boluex/twitter_clone:1.3
         ports:
         - containerPort: 8000
         resources:
