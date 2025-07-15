@@ -66,4 +66,21 @@ spec:
     path: /metrics
     scrapeTimeout: 14s
 
-
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: twitter-clone
+  namespace: twitter
+spec:
+  rules:
+  - host: twitter-clone.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: twitter-clone
+            port:
+              number: 80
