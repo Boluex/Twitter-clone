@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m install --update pip
-          pip install -requirements.txt
+          pip install -r requirements.txt
 
 
       - name: sign in to dockerhub
